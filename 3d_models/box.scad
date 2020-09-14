@@ -4,7 +4,7 @@ diam_button = 58;
 plate = diam_button * 2;
 heigth = 75;
 wall_thickness =  2;
-screw_hole_diam = 2;
+screw_hole_diam = 3;
 
 module keystone(){
     rotate([0,-90,-90]){

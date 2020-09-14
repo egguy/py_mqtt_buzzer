@@ -1,6 +1,8 @@
+$fn=100;
 diam_button = 58;
 wall_thickness = 2;
-screw_diam = 2;
+screw_diam = 3;
+offset = 1;
 
 plate = diam_button * 2;
 
@@ -16,7 +18,7 @@ difference(){
 
 module top_plate(){
     hole_diameter = screw_diam / 2;
-    move = wall_thickness+hole_diameter;
+    move = wall_thickness+hole_diameter+offset;
     difference(){
         base_top_plate();
         translate([move, move, 0]){
