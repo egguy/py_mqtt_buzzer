@@ -41,6 +41,19 @@ upload on the board:
 * mqtt_as.py
 * players.py
 * main.py
+* config.json
+
+## config.json file
+
+```json
+{
+  "server": "<server_ip_dns>",
+  "ssid": "<wifi_ssid>",
+  "wifi_pw": "<wifi_pass>",
+  "user": "<mqtt_user>",
+  "password": "<mqtt_password>"
+}
+```
 
 # Protocol
 
