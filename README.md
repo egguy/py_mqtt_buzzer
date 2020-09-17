@@ -41,3 +41,17 @@ upload on the board:
 * mqtt_as.py
 * players.py
 * main.py
+
+# Protocol
+
+Use MQTT protocol and broker
+
+## topics + messages
+
+* buzz/ping
+  * every 10s send serial
+* buzz/{serial}/events -> events sent by the buzzer controller
+  * 0 -> 3: buzzer number pressed
+  * r: reset pressed
+* buzz/{serial}/config -> send config to the buzzer
+  * reset -> reset the buzzer (all light off, allow a new press)

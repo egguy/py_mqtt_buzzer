@@ -4,6 +4,8 @@
 #import webrepl
 #webrepl.start()
 
+
+"""
 def do_connect():
     import network
     wlan = network.WLAN(network.STA_IF)
@@ -15,3 +17,4 @@ def do_connect():
             pass
     print('network config:', wlan.ifconfig())
     return wlan
+"""
