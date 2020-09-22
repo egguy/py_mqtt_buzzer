@@ -71,4 +71,6 @@ Use MQTT protocol and broker
   * on $i -> set player $i buzzer light on
   * off $i -> turn of player $i led
   * lock -> prevent press
+  * lock $i -> prevent player press (disable buzzer, don't touch light)
   * unlock -> unlock
+  * unlock $i -> unlock as player (don't touch the light)
