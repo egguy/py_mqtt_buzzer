@@ -15,7 +15,7 @@ event_topic = "buzz/{}/events".format(serial)
 announce_topic = "buzz/ping"
 
 ping = False
-pressed = False
+locked = False
 # queue to push message to mqtt
 notification_queue = Queue(maxsize=16)
 # Reset pin
@@ -26,11 +26,15 @@ def button_press(pos: int) -> None:
     """
     Handler for button press
     """
-    global pressed  # Prevent creating local variable
-    if pressed:
+    global locked  # Prevent creating local variable
+    if locked:
+        print("locked no press")
+        return
+    if players_lock[pos]:
+        print("Player lock")
         return
     # Lock button press
-    pressed = True
+    locked = True
     # light matching player
     light_player(pos)
     # Push player number in mqtt
@@ -41,8 +45,8 @@ def reset_state():
     """
     Reset the buttons light and allow another press
     """
-    global pressed  # Prevent creating local variable
-    pressed = False
+    global locked  # Prevent creating local variable
+    locked = False
     reset_lights()
 
 
@@ -61,35 +65,64 @@ for i, button in enumerate(players_buzzer):
     pb.press_func(button_press, (i,))
 
 
-def receive_callback(topic, msg, retained):
+def receive_callback(topic: bytes, msg: bytes, retained):
+    global locked
     print((topic, msg, retained))
     if msg == b'reset':
         reset_state()
+    elif msg.startswith(b'on') and len(msg) == 4:
+        player = msg[3] - 48  # 48 = char '0'
+        if 0 <= player < len(players_led):
+            print("light ", player)
+            light_player(player)
+    elif msg.startswith(b'off') and len(msg) == 5:
+        player = msg[4] - 48  # 48 = char '0'
+        if 0 <= player < len(players_led):
+            print("off", player)
+            lightoff_player(player)
+    elif msg.startswith(b'lock'):
+        if len(msg) == 4:
+            print("lock")
+            locked = True
+        elif len(msg) == 6:
+            player = msg[5] - 48
+            if 0 <= player < len(players_led):
+                print("plock", player)
+                players_lock[player] = 1
+    elif msg.startswith(b'unlock'):
+        if len(msg) == 6:
+            print("unlock")
+            locked = False
+        elif len(msg) == 8:
+            player = msg[7] - 48
+            if 0 <= player < len(players_led):
+                print("punlock", player)
+                players_lock[player] = 0
 
 
-async def conn_han(client):
+async def conn_han(mqtt_client):
     global ping
     await client.subscribe(config_topic)
     if not ping:
-        asyncio.create_task(ping_task(client))
+        asyncio.create_task(ping_task(mqtt_client))
 
 
-async def ping_task(client):
+async def ping_task(mqtt_client):
     global ping
     ping = True
     while True:
-        await client.publish(announce_topic, serial, qos=1)
+        await mqtt_client.publish(announce_topic, serial, qos=1)
         await asyncio.sleep(10)
 
 
-async def main(client, queue: Queue):
-    await client.connect()
+async def main(mqtt_client, queue: Queue):
+    await mqtt_client.connect()
 
     while True:
         data = await queue.get()
         print('publish', data)
         # If WiFi is down the following will pause for the duration.
-        await client.publish('buzz/{}/events'.format(serial), '{}'.format(data), qos=1)
+        await mqtt_client.publish('buzz/{}/events'.format(serial), '{}'.format(data), qos=1)
 
 
 config['subs_cb'] = receive_callback
