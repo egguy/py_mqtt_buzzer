@@ -68,3 +68,7 @@ Use MQTT protocol and broker
   * r: reset pressed
 * buzz/{serial}/config -> send config to the buzzer
   * reset -> reset the buzzer (all light off, allow a new press)
+  * on $i -> set player $i buzzer light on
+  * off $i -> turn of player $i led
+  * lock -> prevent press
+  * unlock -> unlock

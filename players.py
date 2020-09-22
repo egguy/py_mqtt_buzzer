@@ -11,7 +11,7 @@ RESET = Pin(34, Pin.IN, Pin.PULL_UP)
 PLAYERS_COUNT = len(PLAYERS_LED_PIN)
 
 # leds
-players_led = [Pin(i, Pin.OUT, value=1) for i in PLAYERS_LED_PIN]
+players_led = [Pin(i, Pin.OUT, value=0) for i in PLAYERS_LED_PIN]
 players_buzzer = [Pin(i, Pin.IN, Pin.PULL_UP) for i in PLAYERS_BUZZER_PIN]
 # inputs
 players_state = [0]*PLAYERS_COUNT
@@ -21,11 +21,16 @@ triggered = False
 
 def reset_lights():
     for i in players_led:
-        i.value(1)
+        i.value(0)
 
 
 def light_player(pos: int):
     "Turn on the led of a player"
     player_led = players_led[pos]
-    player_led.value(0)
+    player_led.value(1)
 
+
+def lightoff_player(pos: int):
+    "Turn off the led of a player"
+    player_led = players_led[pos]
+    player_led.value(0)
