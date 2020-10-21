@@ -1,12 +1,16 @@
-# Push my button faster
+# Push my button
 
-Doc sur le jeu pour il faut slapper le plus rapidement un bouton
+Doc sur le jeu où il faut slapper le plus rapidement possible un bouton
 
 ## Principe
 
 $x joueur s'affrontent et doivent appuyer sur un bouton le plus vite possible
 
-Suite à un appui, allumage du premier bouton appuyé, verrouillage des autres
+Suite à un appui, allumage du premier bouton appuyé, verrouillage des autres.
+
+Quand un bouton est appuyé une variable globale empeche les autres boutons de se déclancher et le buzzer correspondant s'allume. L'envoi d'un reset (ou appui sur le reset), remet à 0 la variable, et coupe les lumiéres.
+
+Le verrouillage d'un bouton individuel est permanent jusqu'a l'envoi d'un deverouillage. L'allumage du buzzer par MQTT est independant de son état.
 
 Envoi des events en MQTT
 
