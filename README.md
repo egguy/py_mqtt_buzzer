@@ -58,6 +58,27 @@ upload on the board:
   "password": "<mqtt_password>"
 }
 ```
+### Update the connection from the serial
+
+Start with a Ctrl-C to stop the current process
+
+then send line by line:
+
+exemple:
+```python
+f = open('config.json', 'w')
+f.write("""{
+  "server": "<server_ip_dns>",
+  "ssid": "<wifi_ssid>",
+  "wifi_pw": "<wifi_pass>",
+  "user": "<mqtt_user>",
+  "password": "<mqtt_password>"
+}""")
+f.close()
+```
+
+then do a ctrl-d to soft restart the system.
+
 
 # Protocol
 
@@ -75,6 +96,6 @@ Use MQTT protocol and broker
   * on $i -> set player $i buzzer light on
   * off $i -> turn of player $i led
   * lock -> prevent press
-  * lock $i -> prevent player press (disable buzzer, don't touch light)
+  * lock $i -> prevent player press (disable buzzer, don't touch the state of the light)
   * unlock -> unlock
-  * unlock $i -> unlock as player (don't touch the light)
+  * unlock $i -> unlock as player (don't touch the state of the light)
